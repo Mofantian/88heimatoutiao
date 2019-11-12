@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "core-js": "^3.3.2",
+    "element-ui": "f:\\heimapeixun\\��ҵ��\\�׶�11\\��Ŀ\\project>\"D:\\nodejs\\\\node.exe\"  \"D:\\nodejs\\\\node_modules\\npm\\bin\\npm-cli.js\" config get save-prefix \r\n^2.12.0",
     "vue": "^2.6.10",
     "vue-router": "^3.1.3"
   },

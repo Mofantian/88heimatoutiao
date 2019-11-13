@@ -13,26 +13,28 @@
         >
         <el-menu-item>首页</el-menu-item>
         <!-- 二级菜单 -->
-        <el-submenu>
+        <el-submenu index="1">
           <template slot="title">内容管理</template>
-          <el-menu-item>发布文章</el-menu-item>
-          <el-menu-item>内容管理</el-menu-item>
-          <el-menu-item>评论列表</el-menu-item>
-          <el-menu-item>素材管理</el-menu-item>
+          <el-menu-item index="1-1">发布文章</el-menu-item>
+          <el-menu-item index="1-2">内容管理</el-menu-item>
+          <el-menu-item index="1-3">评论列表</el-menu-item>
+          <el-menu-item index="1-4">素材管理</el-menu-item>
         </el-submenu>
-        <el-submenu>
+        <el-submenu index="2">
           <template slot="title">粉丝管理</template>
-          <el-menu-item>图文数据</el-menu-item>
-          <el-menu-item>粉丝概况</el-menu-item>
-          <el-menu-item>粉丝画像</el-menu-item>
-          <el-menu-item>粉丝列表</el-menu-item>
+          <el-menu-item index="2-1">图文数据</el-menu-item>
+          <el-menu-item index="2-2">粉丝概况</el-menu-item>
+          <el-menu-item index="2-3">粉丝画像</el-menu-item>
+          <el-menu-item index="2-4">粉丝列表</el-menu-item>
         </el-submenu>
         <el-menu-item>账户信息</el-menu-item>
       </el-menu>
     </el-aside>
     <el-container>
       <!-- 头部容器 -->
-      <el-header>Header</el-header>
+      <el-header>
+        <layout-header></layout-header>
+      </el-header>
       <el-main>
         <!-- 中间内容容器 -->
         这里面放二级路由
@@ -43,11 +45,11 @@
 </template>
 
 <script>
-
+import layoutHeader from '../../components/layout-header.vue'
 export default {
   name: 'home',
   components: {
-
+    'layout-header': layoutHeader
   }
 }
 </script>

@@ -88,10 +88,16 @@ export default {
   methods: {
     onlogin () {
       // ref: 可以通过给标签定义一个ref属性,通过this.$refs属性 获取dom对象
-      this.$refs.formObj.validate(function (isOK) {
+      this.$refs.formObj.validate((isOK) => {
         if (isOK) {
           // 如果为true 继续下一步,调用接口登录
-          console.log('校验成功')
+          this.$axios({
+            method: 'POST',
+            url: '/authorizations',
+            data: this.loginForm
+          }).then(res => {
+            console.log(res)
+          })
         }
       })
     }

@@ -1,6 +1,6 @@
 <template>
-  <div class="home">
-    首页
+  <div>
+    发布文章
   </div>
 </template>
 

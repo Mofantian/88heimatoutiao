@@ -7,6 +7,8 @@ import login from '@/views/login' // 简写路径,简写了index.vue
 import home from '@/views/home'
 import article from '@/views/article'
 import publish from '@/views/publish'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 
 Vue.use(VueRouter)
 
@@ -18,9 +20,6 @@ const routes = [{
   component: layout,
   children: [{
     path: '',
-    redirect: '/layout/home'
-  }, {
-    path: '/layout/home',
     component: home
   }, {
     path: '/layout/article',
@@ -53,10 +52,13 @@ const router = new VueRouter({
 // 参数3:next, 一个方法,用于路由放行
 // 具体要做的就是:判断用户的登录状态,有就通过,没有就跳转到登录页
 router.beforeEach((to, from, next) => {
+  // 开启顶部导航进度条特效
+  NProgress.start()
   // console.log('所有的页面访问都要经过这里')
   // 如果是非登录页面才校验登录状态
   // 如果访问的是登录页面,直接放行
   if (to.path === '/login') {
+    // 访问那里就往那里走
     next()
     // 停止代码往后执行
     return
@@ -71,7 +73,15 @@ router.beforeEach((to, from, next) => {
     // 没有就跳转登录页
     window.alert('请先登录')
     next('/login')
+    // 如果在登录页并且是非登录状态访问非登陆页,要手动停止进度条,否则进度条不会停止
+    NProgress.done()
   }
+})
+
+// 当路由导航结束以后触发的路由函数
+router.afterEach((to, next) => {
+  // 结束顶部的导航进度条
+  NProgress.done()
 })
 
 export default router

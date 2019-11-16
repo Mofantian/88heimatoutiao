@@ -8,7 +8,6 @@ import home from '@/views/home'
 import article from '@/views/article'
 import publish from '@/views/publish'
 import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
 
 Vue.use(VueRouter)
 

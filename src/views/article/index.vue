@@ -106,6 +106,21 @@
         </el-table-column>
       </el-table>
     </el-card>
+    <!-- 分页 -->
+    <!--
+      分页组件
+      默认按照10条每页划分页码
+      total 用来指定一共有多少条数据
+      background 背景色
+      layout 用来控制布局
+     -->
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :total="totalCount"
+      @current-change="onPageChange"
+      >
+    </el-pagination>
   </div>
 </template>
 
@@ -146,14 +161,16 @@ export default {
           value: 4,
           lable: '已删除'
         }
-      ]
+      ],
+      totalCount: 0
     }
   },
   methods: {
-    loadArticles () {
+    // 如果page 就是用传递的,如果没传,就默认是1
+    loadArticles (page = 1) {
       // 在我们的项目中,除了登录页不需要token,其它所有的接口都需要提供token才能请求
-    // 否则后端返回401错误
-    // 我们这里的后端要求把token放到请求头中
+      // 否则后端返回401错误
+      // 我们这里的后端要求把token放到请求头中
       const token = window.localStorage.getItem('user-token')
       this.$axios({
         method: 'GET',
@@ -163,13 +180,25 @@ export default {
         // 后端要求把token放到请求头中,使用一个名字叫Authorization
         // 注意:token的格式要求:Bearer 用户token  --->  Bearer后面有一个空格
           Authorization: `Bearer ${token}`
+        },
+        // Query 参数使用params传递
+        params: {
+          page, // 页码
+          per_page: 10 // 每页大小,后端默认每页10条
         }
       }).then(res => {
         // console.log(res)
+        // 更新文章列表数组
         this.articles = res.data.data.results
+        // 更新总记录数
+        this.totalCount = res.data.data.total_count
       }).catch(err => {
         console.log('获取数据失败', err)
       })
+    },
+    onPageChange (page) {
+      // 请求加载指定页码的文章列表
+      this.loadArticles(page)
     }
   },
   created () {

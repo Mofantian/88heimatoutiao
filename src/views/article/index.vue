@@ -69,13 +69,11 @@
         默认表格列只能渲染普通文本,如果想要渲染别的东西,需要自定义表格列
        -->
       <el-table
-        ref="singleTable"
-        :data="articles"
-        highlight-current-row
+        :data='articles'
         v-loading="loading"
         style="width: 100%">
         <el-table-column
-          property="cover"
+          prop="cover"
           label="封面"
           width="120">
           <!--
@@ -88,12 +86,12 @@
           </template>
         </el-table-column>
         <el-table-column
-          property="title"
+          prop="title"
           label="标题"
           width="120">
         </el-table-column>
         <el-table-column
-          property="status"
+          prop="status"
           label="状态"
           width="120">
           <template slot-scope="scope">
@@ -109,14 +107,16 @@
           </template>
         </el-table-column>
         <el-table-column
-          property="pubdate"
+          prop="pubdate"
           label="发布日期">
         </el-table-column>
         <el-table-column
-          property=""
+          prop=""
           label="操作">
-          <el-button type="danger" size="mini">删除</el-button>
-          <el-button type="primary" size="mini">编辑</el-button>
+          <template slot-scope="scope">
+            <el-button type="danger" size="mini" @click="onDelete(scope.row.id)">删除</el-button>
+            <el-button type="primary" size="mini">编辑</el-button>
+          </template>
         </el-table-column>
       </el-table>
     </el-card>
@@ -152,7 +152,7 @@ export default {
         // begin_pubdate: '', // 起始时间
         // end_pubdate: '' // 截止时间
       },
-      rangeDate: '', // 日期
+      rangeDate: [], // 日期
       articles: [],
       articleStatus: [
         {
@@ -226,6 +226,7 @@ export default {
         // console.log(res)
         // 更新文章列表数组
         this.articles = res.data.data.results
+        console.log(this.articles)
         // 更新总记录数
         this.totalCount = res.data.data.total_count
       }).catch(err => {
@@ -237,6 +238,25 @@ export default {
     onPageChange (page) {
       // 请求加载指定页码的文章列表
       this.loadArticles(page)
+    },
+    onDelete (articleId) {
+      // 这里报400错是因为数据id的问题
+      // 这个id不对
+      this.$axios({
+        method: 'DELETE',
+        // 接口说明的application/json不需要传递
+        // axios会自动添加发送Content-Type application/json
+        // 注意:接口路径中的:target是一个路径参数,是动态的,不要写:
+        url: `/articles/${articleId}`,
+        headers: {
+          Authorization: `Bearer ${window.localStorage.getItem('user-token')}`
+        }
+      }).then(res => {
+        // console.log(res)
+        this.loadArticles(1)
+      }).catch(err => {
+        console.log('数据删除失败', err)
+      })
     }
   },
   created () {
@@ -247,6 +267,10 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped lang="less">
+.article {
+  .box-card {
+    margin-bottom: 20px;
+  }
+}
 </style>

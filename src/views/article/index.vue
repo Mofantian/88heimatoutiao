@@ -38,7 +38,8 @@
             range-separator="-"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
-            v-model="filterForm.begin_pubdate"
+            v-model="rangeDate"
+            value-format="yyyy-MM-dd"
             >
           </el-date-picker>
         </el-form-item>
@@ -51,7 +52,7 @@
     <!-- 数据展示 -->
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span>共找到条符合条件的内容</span>
+        <span>共找到{{totalCount}}条符合条件的内容</span>
       </div>
       <!--
         el-table 表格组件
@@ -147,11 +148,11 @@ export default {
       // 过滤数据的表单
       filterForm: {
         status: null, // 文章状态
-        channel_id: null, // id
-        begin_pubdate: '', // 起始时间
-        end_pubdate: '' // 截止时间
+        channel_id: null // id
+        // begin_pubdate: '', // 起始时间
+        // end_pubdate: '' // 截止时间
       },
-      rangeDate: '',
+      rangeDate: '', // 日期
       articles: [],
       articleStatus: [
         {
@@ -216,10 +217,10 @@ export default {
           page, // 页码
           per_page: 10, // 每页大小,后端默认每页10条
           status: this.filterForm.status, // 文章状态
-          // status: null // axios有个功能,当参数为nall的时候,不发送请求
-          channel_id: this.filterForm.channel_id // 频道id
-          // begin_pubdate, // 开始时间
-          // end_pubdate // 结束时间
+          // status: null // axios有个功能,当参数为null,undefined的时候,不发送请求
+          channel_id: this.filterForm.channel_id, // 频道id
+          begin_pubdate: this.rangeDate ? this.rangeDate[0] : null, // 开始时间
+          end_pubdate: this.rangeDate ? this.rangeDate[1] : null // 结束时间
         }
       }).then(res => {
         // console.log(res)

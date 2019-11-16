@@ -179,7 +179,8 @@ export default {
       ],
       totalCount: 0,
       loading: true, // 表格的loading状态
-      channels: [] // 存储文章列表
+      channels: [], // 存储文章列表
+      page: 1 // 当前页码
     }
   },
   methods: {
@@ -236,6 +237,8 @@ export default {
       })
     },
     onPageChange (page) {
+      // 记录当前最新页码
+      this.page = page
       // 请求加载指定页码的文章列表
       this.loadArticles(page)
     },
@@ -253,7 +256,7 @@ export default {
         }
       }).then(res => {
         // console.log(res)
-        this.loadArticles(1)
+        this.loadArticles(this.page)
       }).catch(err => {
         console.log('数据删除失败', err)
       })

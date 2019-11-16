@@ -11,10 +11,16 @@
         <el-form-item label="内容">
           <el-input type="textarea" v-model="article.content"></el-input>
         </el-form-item>
-        <el-form-item label="频道">
-          <el-select v-model="article.channel_id" placeholder="请选择活动区域">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
+        <el-form-item label="频道列表">
+          <!-- 下拉列表会把选中的option的value同步到数据中 -->
+          <el-select placeholder="请选择频道" v-model="article.channel_id">
+            <el-option label="所有频道" :value="null"></el-option>
+            <el-option
+              :label="channel.name"
+              :value="channel.id"
+              v-for="channel in channels"
+              :key="channel.id"
+              ></el-option>
           </el-select>
         </el-form-item>
         <!-- <el-form-item label="封面">
@@ -24,8 +30,8 @@
           </el-radio-group>
         </el-form-item> -->
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">发表</el-button>
-          <el-button>存入草稿</el-button>
+          <el-button type="primary" @click="onSubmit(false)">发表</el-button>
+          <el-button @click="onSubmit(true)">存入草稿</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -45,13 +51,47 @@ export default {
           images: [] // 图片,无图就是空数组即可
         }, // 文章封面
         channel_id: ''
-      }
+      },
+      channels: []
     }
   },
   methods: {
-    onSubmit () {
-      console.log('submit!')
+    onSubmit (draft) {
+      this.$axios({
+        method: 'POST',
+        url: '/articles',
+        // header参数
+        headers: {
+          Authorization: `Bearer ${window.localStorage.getItem('user-token')}`
+        },
+        // query参数
+        params: {
+          draft
+        },
+        // body参数
+        data: this.article
+      }).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log('发布失败', err)
+      })
+    },
+    // 是否需要token由接口文档告诉你
+    loadChannels () {
+      this.$axios({
+        method: 'GET',
+        url: '/channels'
+      }).then(res => {
+        // console.log(res)
+        this.channels = res.data.data.channels
+      }).catch(err => {
+        console.log('文章类别获取失败', err)
+      })
     }
+  },
+  created () {
+    // 加载频道列表
+    this.loadChannels()
   }
 }
 </script>

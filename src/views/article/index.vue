@@ -59,6 +59,7 @@
         ref="singleTable"
         :data="articles"
         highlight-current-row
+        v-loading="loading"
         style="width: 100%">
         <el-table-column
           property="cover"
@@ -118,6 +119,7 @@
       background
       layout="prev, pager, next"
       :total="totalCount"
+      :disabled='loading'
       @current-change="onPageChange"
       >
     </el-pagination>
@@ -162,12 +164,15 @@ export default {
           lable: '已删除'
         }
       ],
-      totalCount: 0
+      totalCount: 0,
+      loading: true // 表格的loading状态
     }
   },
   methods: {
     // 如果page 就是用传递的,如果没传,就默认是1
     loadArticles (page = 1) {
+      // 加载loading
+      this.loading = true
       // 在我们的项目中,除了登录页不需要token,其它所有的接口都需要提供token才能请求
       // 否则后端返回401错误
       // 我们这里的后端要求把token放到请求头中
@@ -194,6 +199,8 @@ export default {
         this.totalCount = res.data.data.total_count
       }).catch(err => {
         console.log('获取数据失败', err)
+      }).finally(() => { // 无论成功还是失败最终都要执行
+        this.loading = false
       })
     },
     onPageChange (page) {

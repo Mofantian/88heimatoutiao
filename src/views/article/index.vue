@@ -8,17 +8,28 @@
       <el-form ref="form" label-width="80px">
         <el-form-item label="文章状态">
           <el-radio-group v-model="filterForm.status">
-            <el-radio label="全部"></el-radio>
-            <el-radio label="草稿"></el-radio>
-            <el-radio label="待审核"></el-radio>
-            <el-radio label="审核通过"></el-radio>
-            <el-radio label="审核失败"></el-radio>
+            <!--
+              单选框组会把选中的radio的label同步给绑定的数据
+              借口要求不传为全部
+             -->
+            <el-radio :label="null">全部</el-radio>
+            <el-radio label="0">草稿</el-radio>
+            <el-radio label="1">待审核</el-radio>
+            <el-radio label="2">审核通过</el-radio>
+            <el-radio label="3">审核失败</el-radio>
+            <el-radio label="4">已删除</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="频道列表">
-          <el-select placeholder="请选择活动区域" v-model="filterForm.channel_id">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
+          <!-- 下拉列表会把选中的option的value同步到数据中 -->
+          <el-select placeholder="请选择频道" v-model="filterForm.channel_id">
+            <el-option label="所有频道" :value="null"></el-option>
+            <el-option
+              :label="channel.name"
+              :value="channel.id"
+              v-for="channel in channels"
+              :key="channel.id"
+              ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="时间选择">
@@ -32,7 +43,8 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">查询</el-button>
+          <!-- 点击查询按钮,重新发请求获取筛选数据,新查询的数据 -->
+          <el-button type="primary" @click="loadArticles(1)">查询</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -134,8 +146,8 @@ export default {
     return {
       // 过滤数据的表单
       filterForm: {
-        status: '', // 文章状态
-        channel_id: '', // id
+        status: null, // 文章状态
+        channel_id: null, // id
         begin_pubdate: '', // 起始时间
         end_pubdate: '' // 截止时间
       },
@@ -165,10 +177,23 @@ export default {
         }
       ],
       totalCount: 0,
-      loading: true // 表格的loading状态
+      loading: true, // 表格的loading状态
+      channels: [] // 存储文章列表
     }
   },
   methods: {
+    // 是否需要token由接口文档告诉你
+    loadChannels () {
+      this.$axios({
+        method: 'GET',
+        url: '/channels'
+      }).then(res => {
+        // console.log(res)
+        this.channels = res.data.data.channels
+      }).catch(err => {
+        console.log('文章类别获取失败', err)
+      })
+    },
     // 如果page 就是用传递的,如果没传,就默认是1
     loadArticles (page = 1) {
       // 加载loading
@@ -189,7 +214,12 @@ export default {
         // Query 参数使用params传递
         params: {
           page, // 页码
-          per_page: 10 // 每页大小,后端默认每页10条
+          per_page: 10, // 每页大小,后端默认每页10条
+          status: this.filterForm.status, // 文章状态
+          // status: null // axios有个功能,当参数为nall的时候,不发送请求
+          channel_id: this.filterForm.channel_id // 频道id
+          // begin_pubdate, // 开始时间
+          // end_pubdate // 结束时间
         }
       }).then(res => {
         // console.log(res)
@@ -209,7 +239,9 @@ export default {
     }
   },
   created () {
-    this.loadArticles()
+    this.loadArticles(1)
+    // 加载频道列表
+    this.loadChannels()
   }
 }
 </script>

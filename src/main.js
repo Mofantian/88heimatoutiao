@@ -22,6 +22,27 @@ axios.defaults.transformResponse = [function (data, headers) {
     return {}
   }
 }]
+// axios响应拦截器
+axios.interceptors.response.use(function (response) {
+  return response
+}, function (error) {
+  return Promise.reject(error)
+})
+// axios请求拦截器
+axios.interceptors.request.use(function (config) {
+  // 在请求拦截器函数中的config是本次请求相关的配置对象
+  // config就是最后要发给后端的那个配置对象
+  // 我们可以在拦截器中对config进行统一配置定制
+  const token = window.localStorage.getItem('user-token')
+  // 统一添加token
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  // return config是通行的规则
+  return config
+}, function (error) {
+  return Promise.reject(error)
+})
 Vue.prototype.$axios = axios // 将axios共享给所有的实例使用
 
 Vue.use(Element)

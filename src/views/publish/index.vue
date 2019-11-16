@@ -9,7 +9,14 @@
           <el-input v-model="article.title"></el-input>
         </el-form-item>
         <el-form-item label="内容">
-          <el-input type="textarea" v-model="article.content"></el-input>
+          <!-- <el-input type="textarea" v-model="article.content"></el-input> -->
+          <!-- 富文本编辑器 -->
+          <quill-editor
+            v-model="article.content"
+            ref="myQuillEditor"
+            :options="editorOption"
+          >
+          </quill-editor>
         </el-form-item>
         <el-form-item label="频道列表">
           <!-- 下拉列表会把选中的option的value同步到数据中 -->
@@ -39,8 +46,15 @@
 </template>
 
 <script>
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+import { quillEditor } from 'vue-quill-editor'
 export default {
   name: 'PublishArticle',
+  components: {
+    quillEditor
+  },
   data () {
     return {
       article: {
@@ -52,7 +66,8 @@ export default {
         }, // 文章封面
         channel_id: ''
       },
-      channels: []
+      channels: [],
+      editorOption: {} // 富文本编辑器的配置选项
     }
   },
   methods: {
@@ -61,9 +76,9 @@ export default {
         method: 'POST',
         url: '/articles',
         // header参数
-        headers: {
-          Authorization: `Bearer ${window.localStorage.getItem('user-token')}`
-        },
+        // headers: {
+        //   Authorization: `Bearer ${window.localStorage.getItem('user-token')}`
+        // },
         // query参数
         params: {
           draft

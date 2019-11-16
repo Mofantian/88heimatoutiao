@@ -203,16 +203,16 @@ export default {
       // 在我们的项目中,除了登录页不需要token,其它所有的接口都需要提供token才能请求
       // 否则后端返回401错误
       // 我们这里的后端要求把token放到请求头中
-      const token = window.localStorage.getItem('user-token')
+      // const token = window.localStorage.getItem('user-token')
       this.$axios({
         method: 'GET',
         url: '/articles',
-        headers: { // headers用来添加请求头
-        // 名字:值
-        // 后端要求把token放到请求头中,使用一个名字叫Authorization
-        // 注意:token的格式要求:Bearer 用户token  --->  Bearer后面有一个空格
-          Authorization: `Bearer ${token}`
-        },
+        // headers: { // headers用来添加请求头
+        // // 名字:值
+        // // 后端要求把token放到请求头中,使用一个名字叫Authorization
+        // // 注意:token的格式要求:Bearer 用户token  --->  Bearer后面有一个空格
+        //   Authorization: `Bearer ${token}`
+        // },
         // Query 参数使用params传递
         params: {
           page, // 页码
@@ -250,10 +250,10 @@ export default {
         // 接口说明的application/json不需要传递
         // axios会自动添加发送Content-Type application/json
         // 注意:接口路径中的:target是一个路径参数,是动态的,不要写:
-        url: `/articles/${articleId}`,
-        headers: {
-          Authorization: `Bearer ${window.localStorage.getItem('user-token')}`
-        }
+        url: `/articles/${articleId}`
+        // headers: {
+        //   Authorization: `Bearer ${window.localStorage.getItem('user-token')}`
+        // }
       }).then(res => {
         // console.log(res)
         this.loadArticles(this.page)

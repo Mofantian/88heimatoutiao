@@ -7,6 +7,7 @@ import login from '@/views/login' // 简写路径,简写了index.vue
 import home from '@/views/home'
 import article from '@/views/article'
 import publish from '@/views/publish'
+import comment from '@/views/comment'
 import NProgress from 'nprogress'
 
 Vue.use(VueRouter)
@@ -30,6 +31,9 @@ const routes = [{
   {
     path: '/publish/:articleID',
     component: publish
+  }, {
+    path: '/comment',
+    component: comment
   }]
 }, {
   path: '/login',

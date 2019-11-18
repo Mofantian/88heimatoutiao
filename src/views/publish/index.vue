@@ -103,7 +103,7 @@ export default {
       }).catch(err => {
         console.log('发布失败', err)
       })
-    }
+    },
     // 是否需要token由接口文档告诉你
     // loadChannels () {
     //   this.$axios({
@@ -116,11 +116,25 @@ export default {
     //     console.log('文章类别获取失败', err)
     //   })
     // }
+    loadArticle () {
+      this.$axios({
+        url: `/articles/${this.$route.params.articleID}`,
+        method: 'GET'
+      }).then(res => {
+        this.article = res.data.data
+      })
+    }
+  },
+  created () {
+    // 加载频道列表
+    // this.loadChannels()
+
+    // 添加和编辑使用的都是这个组件
+    // 只有编辑才需要在初始化的时候,根据id获取文章内容
+    if (this.$route.params.articleID) {
+      this.loadArticle()
+    }
   }
-  // created () {
-  //   // 加载频道列表
-  //   this.loadChannels()
-  // }
 }
 </script>
 

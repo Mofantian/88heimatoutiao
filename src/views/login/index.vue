@@ -99,7 +99,7 @@ export default {
             // 存储到本地
             window.localStorage.setItem('user-token', res.data.data.token)
             // 跳转到主页
-            this.$router.push('/layout')
+            this.$router.push('/')
           }).catch(res => {
             this.$message({
               message: '你的手机号或者验证码错误',

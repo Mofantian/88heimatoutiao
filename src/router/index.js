@@ -13,18 +13,18 @@ Vue.use(VueRouter)
 
 const routes = [{
   path: '/',
-  redirect: '/layout'
-}, {
-  path: '/layout',
   component: layout,
   children: [{
     path: '',
     component: home
   }, {
-    path: '/layout/article',
+    path: '/article',
     component: article
   }, {
-    path: '/layout/publish',
+    path: '/publish',
+    component: publish
+  }, {
+    path: '/publish/:articleID',
     component: publish
   }]
 }, {

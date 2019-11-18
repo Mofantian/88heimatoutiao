@@ -2,7 +2,7 @@
   <div>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span>发布文章</span>
+        <span>{{ $route.params.articleID ? '编辑文章' : '发布文章'}}</span>
       </div>
       <el-form ref="form" :model="article" label-width="80px">
         <el-form-item label="标题">
@@ -85,6 +85,15 @@ export default {
   },
   methods: {
     onSubmit (draft) {
+      if (this.$route.params.articleID) {
+        // 请求编辑文章
+        this.updateArticle(draft)
+      } else {
+        // 请求添加文章
+        this.addArticle(draft)
+      }
+    },
+    addArticle (draft) {
       this.$axios({
         method: 'POST',
         url: '/articles',
@@ -99,8 +108,36 @@ export default {
         // body参数
         data: this.article
       }).then(res => {
-        console.log(res)
+        this.$message({
+          type: 'success',
+          message: '发布成功'
+        })
+        console.log('发布成功', res)
+        this.$router.push('/article')
       }).catch(err => {
+        this.$message.error('发布失败')
+        console.log('发布失败', err)
+      })
+    },
+    updateArticle (draft) {
+      this.$axios({
+        method: 'PUT',
+        url: `/articles/${this.$route.params.articleID}`,
+        // query参数
+        params: {
+          draft
+        },
+        // body参数
+        data: this.article
+      }).then(res => {
+        this.$message({
+          type: 'success',
+          message: '更新成功'
+        })
+        console.log('修改成功', res)
+        this.$router.push('/article')
+      }).catch(err => {
+        this.$message.error('更新失败')
         console.log('发布失败', err)
       })
     },

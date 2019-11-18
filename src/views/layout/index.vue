@@ -39,7 +39,11 @@
       <el-main>
         <!-- 中间内容容器 -->
         <!-- 这里面放二级路由 -->
-        <router-view></router-view>
+        <!--
+          在router-view上增加一个key,就可以禁用路由缓存功能
+          key值不唯一即可
+         -->
+        <router-view :key="$route.path"></router-view>
       </el-main>
     </el-container>
   </el-container>

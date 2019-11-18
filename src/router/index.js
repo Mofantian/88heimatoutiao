@@ -23,7 +23,11 @@ const routes = [{
   }, {
     path: '/publish',
     component: publish
-  }, {
+  },
+  // 如果从a路由跳转到b路由,如果两个路由使用的同一个组件,那么这个组件不会重新渲染
+  // 正常的路由跳转,会销毁离开的路由,渲染新匹配到的组件
+  // 组件销毁也就意味着它的数据之类都被清除了
+  {
     path: '/publish/:articleID',
     component: publish
   }]

@@ -10,7 +10,7 @@
           <el-radio-group v-model="filterForm.status">
             <!--
               单选框组会把选中的radio的label同步给绑定的数据
-              借口要求不传为全部
+              接口要求不传为全部
              -->
             <el-radio :label="null">全部</el-radio>
             <el-radio label="0">草稿</el-radio>
@@ -22,7 +22,7 @@
         </el-form-item>
         <el-form-item label="频道列表">
           <!-- 下拉列表会把选中的option的value同步到数据中 -->
-          <el-select placeholder="请选择频道" v-model="filterForm.channel_id">
+          <!-- <el-select placeholder="请选择频道" v-model="filterForm.channel_id">
             <el-option label="所有频道" :value="null"></el-option>
             <el-option
               :label="channel.name"
@@ -30,7 +30,8 @@
               v-for="channel in channels"
               :key="channel.id"
               ></el-option>
-          </el-select>
+          </el-select> -->
+          <channel-select v-model="filterForm.channel_id"></channel-select>
         </el-form-item>
         <el-form-item label="时间选择">
           <el-date-picker
@@ -140,9 +141,13 @@
 </template>
 
 <script>
+import ChannelSelect from '@/components/channel-select'
 export default {
   // 建议给每个组件都起一个名字,有一些好处,例如我们可以在调试工具中搜索到这个组件
   name: 'articles',
+  components: {
+    ChannelSelect
+  },
   data () {
     return {
       // 过滤数据的表单
@@ -179,23 +184,23 @@ export default {
       ],
       totalCount: 0,
       loading: true, // 表格的loading状态
-      channels: [], // 存储文章列表
+      // channels: [], // 存储文章列表
       page: 1 // 当前页码
     }
   },
   methods: {
     // 是否需要token由接口文档告诉你
-    loadChannels () {
-      this.$axios({
-        method: 'GET',
-        url: '/channels'
-      }).then(res => {
-        // console.log(res)
-        this.channels = res.data.data.channels
-      }).catch(err => {
-        console.log('文章类别获取失败', err)
-      })
-    },
+    // loadChannels () {
+    //   this.$axios({
+    //     method: 'GET',
+    //     url: '/channels'
+    //   }).then(res => {
+    //     // console.log(res)
+    //     this.channels = res.data.data.channels
+    //   }).catch(err => {
+    //     console.log('文章类别获取失败', err)
+    //   })
+    // },
     // 如果page 就是用传递的,如果没传,就默认是1
     loadArticles (page = 1) {
       // 加载loading
@@ -227,7 +232,7 @@ export default {
         // console.log(res)
         // 更新文章列表数组
         this.articles = res.data.data.results
-        console.log(this.articles)
+        // console.log(this.articles)
         // 更新总记录数
         this.totalCount = res.data.data.total_count
       }).catch(err => {
@@ -256,6 +261,7 @@ export default {
         // }
       }).then(res => {
         // console.log(res)
+        // 删除成功,重新加载当前页码的文章列表
         this.loadArticles(this.page)
       }).catch(err => {
         console.log('数据删除失败', err)
@@ -265,7 +271,7 @@ export default {
   created () {
     this.loadArticles(1)
     // 加载频道列表
-    this.loadChannels()
+    // this.loadChannels()
   }
 }
 </script>

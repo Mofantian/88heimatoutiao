@@ -12,6 +12,7 @@ axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0'
 
 // axios默认会把后端返回的数据使用JSON.parse转为对象给我们使用
 // 同时它也提供了让我们自定义转换的功能
+// 我们这里手动配置使用 JSONbig.parse(data)
 axios.defaults.transformResponse = [function (data, headers) {
   // console.log('后端原始数据', data)
   try {

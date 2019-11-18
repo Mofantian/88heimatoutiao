@@ -20,7 +20,7 @@
         </el-form-item>
         <el-form-item label="频道列表">
           <!-- 下拉列表会把选中的option的value同步到数据中 -->
-          <el-select placeholder="请选择频道" v-model="article.channel_id">
+          <!-- <el-select placeholder="请选择频道" v-model="article.channel_id">
             <el-option label="所有频道" :value="null"></el-option>
             <el-option
               :label="channel.name"
@@ -28,7 +28,14 @@
               v-for="channel in channels"
               :key="channel.id"
               ></el-option>
-          </el-select>
+          </el-select> -->
+          <!-- 频道列表组件 -->
+          <!--
+            我们自己封装的频道下拉列表
+            下拉列表的选中状态受绑定数据的影响
+            下拉列表切换选中也会改变绑定的数据
+           -->
+          <channel-select v-model="article.channel_id"></channel-select>
         </el-form-item>
         <!-- <el-form-item label="封面">
           <el-radio-group v-model="form.resource">
@@ -46,14 +53,20 @@
 </template>
 
 <script>
+// 加载富文本编辑器的样式文件
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
+// 加载富文本编辑器的核心组件
 import { quillEditor } from 'vue-quill-editor'
+
+import ChannelSelect from '@/components/channel-select'
 export default {
   name: 'PublishArticle',
   components: {
-    quillEditor
+    // 注册局部组件
+    quillEditor,
+    ChannelSelect
   },
   data () {
     return {
@@ -66,7 +79,7 @@ export default {
         }, // 文章封面
         channel_id: ''
       },
-      channels: [],
+      // channels: [],
       editorOption: {} // 富文本编辑器的配置选项
     }
   },
@@ -90,24 +103,24 @@ export default {
       }).catch(err => {
         console.log('发布失败', err)
       })
-    },
-    // 是否需要token由接口文档告诉你
-    loadChannels () {
-      this.$axios({
-        method: 'GET',
-        url: '/channels'
-      }).then(res => {
-        // console.log(res)
-        this.channels = res.data.data.channels
-      }).catch(err => {
-        console.log('文章类别获取失败', err)
-      })
     }
-  },
-  created () {
-    // 加载频道列表
-    this.loadChannels()
+    // 是否需要token由接口文档告诉你
+    // loadChannels () {
+    //   this.$axios({
+    //     method: 'GET',
+    //     url: '/channels'
+    //   }).then(res => {
+    //     // console.log(res)
+    //     this.channels = res.data.data.channels
+    //   }).catch(err => {
+    //     console.log('文章类别获取失败', err)
+    //   })
+    // }
   }
+  // created () {
+  //   // 加载频道列表
+  //   this.loadChannels()
+  // }
 }
 </script>
 

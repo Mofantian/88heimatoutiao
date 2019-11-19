@@ -36,8 +36,8 @@
         </el-table-column>
         <el-table-column
           label="操作">
-          <template>
-            <el-button type="primary">修改</el-button>
+          <template slot-scope="scope">
+            <el-button type="primary" @click="$router.push('/comment/'+scope.row.id)">修改</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -74,10 +74,6 @@ export default {
         params: {
           page, // 页码
           per_page: 10, // 每页大小,后端默认每页10条
-          // status: this.filterForm.status, // 文章状态
-          // channel_id: this.filterForm.channel_id, // 频道id
-          // begin_pubdate: this.rangeDate ? this.rangeDate[0] : null, // 开始时间
-          // end_pubdate: this.rangeDate ? this.rangeDate[1] : null // 结束时间
           response_type: 'comment'
         }
       }).then(res => {

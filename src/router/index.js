@@ -8,6 +8,7 @@ import home from '@/views/home'
 import article from '@/views/article'
 import publish from '@/views/publish'
 import comment from '@/views/comment'
+import commentlist from '@/views/comment-list'
 import NProgress from 'nprogress'
 
 Vue.use(VueRouter)
@@ -34,6 +35,11 @@ const routes = [{
   }, {
     path: '/comment',
     component: comment
+  }, {
+    path: '/comment/:articleID',
+    component: commentlist,
+    // 将路由参数映射给组件的props数据,这样获取参数更方便
+    props: true
   }]
 }, {
   path: '/login',

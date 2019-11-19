@@ -3,7 +3,28 @@
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>素材管理</span>
-        <el-button style="float: right; padding: 3px 0" type="text">上传图片</el-button>
+        <!-- <el-button style="float: right; padding: 3px 0" type="text">上传图片</el-button> -->
+        <!--
+          action 上传文件的请求地址
+          on-preview 上传预览事件
+          on-remove 删除事件
+          这个上传组件能帮我们自动发送请求,我们只需要把相关参数配置给它就可以了
+          上传组件内部会自己去发请求提交文件,它内部使用的请求不是我们项目中使用的axios
+          所以也就不会有基础路径,拦截器等
+          请求方法:默认应该就是POST
+          注意:这里需要手动配置请求头
+         -->
+        <el-upload
+          class="upload-demo"
+          style="float: right; padding: 3px 0"
+          action="http://ttapi.research.itcast.cn/mp/v1_0/user/images"
+          :headers="uploadHeaders"
+          name="image"
+          :on-success="onUploadSuccess"
+          :show-file-list="false"
+          >
+          <el-button type="primary">点击上传</el-button>
+        </el-upload>
       </div>
       <div>
         <el-radio-group v-model="type" @change="onFind">
@@ -34,7 +55,7 @@
                 }"
                 @click="onCollect(item)"></i>
               <!-- <i :class="item.is_collected ? 'el-icon-star-on' : 'el-icon-star-off'"></i> -->
-              <i class="el-icon-delete-solid"></i>
+              <i class="el-icon-delete-solid" @click="onDelete(item)"></i>
             </div>
           </el-card>
         </el-col>
@@ -44,12 +65,16 @@
 </template>
 
 <script>
+const token = window.localStorage.getItem('user-token')
 export default {
   name: 'MediaIndex',
   data () {
     return {
       images: [],
-      type: ''
+      type: '全部',
+      uploadHeaders: {
+        Authorization: `Bearer ${token}`
+      }
     }
   },
   created () {
@@ -93,6 +118,34 @@ export default {
         this.$message.error('操作失败')
         console.log('收藏状态操作失败', err)
       })
+    },
+    onDelete (item) {
+      this.$confirm('此操作将永久删除此文件,是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios({
+          url: `/user/images/${item.id}`,
+          method: 'DELETE'
+        }).then(res => {
+          this.$message.success('删除成功')
+          // 更新视图展示
+          this.loadImages()
+        }).catch(err => {
+          this.$message.error('删除失败')
+          console.log('删除操作失败', err)
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
+    onUploadSuccess () {
+      // 组件上传成功之后触发的事件
+      this.loadImages()
     }
   }
 }

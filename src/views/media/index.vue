@@ -5,6 +5,12 @@
         <span>素材管理</span>
         <el-button style="float: right; padding: 3px 0" type="text">上传图片</el-button>
       </div>
+      <div>
+        <el-radio-group v-model="type" @change="onFind">
+          <el-radio-button label="全部">全部</el-radio-button>
+          <el-radio-button label="收藏">收藏</el-radio-button>
+        </el-radio-group>
+      </div>
       <el-row :gutter="20">
         <el-col
           :xs="24"
@@ -40,19 +46,20 @@ export default {
   name: 'MediaIndex',
   data () {
     return {
-      images: []
+      images: [],
+      type: ''
     }
   },
   created () {
     this.loadImages()
   },
   methods: {
-    loadImages () {
+    loadImages (isCollect = false) {
       this.$axios({
         method: 'GET',
         url: '/user/images',
         params: {
-          collect: false // 是否获取收藏图片
+          collect: isCollect // 是否获取收藏图片
         }
       }).then(res => {
         // console.log(res)
@@ -60,6 +67,13 @@ export default {
       }).catch(err => {
         console.log('数据获取失败', err)
       })
+    },
+    // 该函数是radio的change事件处理函数
+    // 通过文档得知,事件函数有个回调参数,选中的radio label的值
+    // 所以我们可以声明一个形参来接收使用
+    onFind (value) {
+      // console.log(value)
+      this.loadImages(value !== '全部')
     }
   }
 }
@@ -72,6 +86,9 @@ export default {
     display: flex;
     justify-content: center;
     font-size: 24px;
+    .el-icon-delete-solid {
+      margin-left: 20px;
+    }
   }
 }
 </style>

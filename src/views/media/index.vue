@@ -27,10 +27,12 @@
               height="200"
             >
             <div style="padding: 14px;" class="action">
-              <i :class="{
+              <i
+                :class="{
                 'el-icon-star-on': item.is_collected,
                 'el-icon-star-off': !item.is_collected
-              }"></i>
+                }"
+                @click="onCollect(item)"></i>
               <!-- <i :class="item.is_collected ? 'el-icon-star-on' : 'el-icon-star-off'"></i> -->
               <i class="el-icon-delete-solid"></i>
             </div>
@@ -74,6 +76,23 @@ export default {
     onFind (value) {
       // console.log(value)
       this.loadImages(value !== '全部')
+    },
+    onCollect (item) {
+      // 请求收藏/取消收藏
+      this.$axios({
+        url: `/user/images/${item.id}`,
+        method: 'PUT',
+        data: {
+          collect: !item.is_collected
+        }
+      }).then(res => {
+        this.$message.success('操作成功')
+        // 更新视图展示
+        item.is_collected = !item.is_collected
+      }).catch(err => {
+        this.$message.error('操作失败')
+        console.log('收藏状态操作失败', err)
+      })
     }
   }
 }

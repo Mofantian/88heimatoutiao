@@ -9,6 +9,7 @@ import article from '@/views/article'
 import publish from '@/views/publish'
 import comment from '@/views/comment'
 import media from '@/views/media'
+import account from '@/views/account'
 import commentlist from '@/views/comment-list'
 import NProgress from 'nprogress'
 
@@ -44,6 +45,9 @@ const routes = [{
   }, {
     path: '/media',
     component: media
+  }, {
+    path: '/account',
+    component: account
   }]
 }, {
   path: '/login',

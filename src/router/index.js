@@ -9,6 +9,7 @@ import article from '@/views/article'
 import publish from '@/views/publish'
 import comment from '@/views/comment'
 import media from '@/views/media'
+import echartsDemo from '@/views/echarts-demo'
 import account from '@/views/account'
 import commentlist from '@/views/comment-list'
 import NProgress from 'nprogress'
@@ -48,6 +49,9 @@ const routes = [{
   }, {
     path: '/account',
     component: account
+  }, {
+    path: '/echartsDemo',
+    component: echartsDemo
   }]
 }, {
   path: '/login',

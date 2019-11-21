@@ -97,10 +97,10 @@ export default {
         url: '/user/photo',
         data: fd
       }).then(res => {
-        // 发布通知头部组件
-        eventBus.$emit('update-user', this.user)
         this.user.photo = res.data.data.photo
         this.loadUserProfile()
+        // 发布通知头部组件
+        eventBus.$emit('update-user', this.user)
       }).catch(err => {
         this.$message.error('上传失败')
         console.log('上传头像失败', err)

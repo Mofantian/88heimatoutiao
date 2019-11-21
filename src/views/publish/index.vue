@@ -37,12 +37,17 @@
            -->
           <channel-select v-model="article.channel_id"></channel-select>
         </el-form-item>
-        <!-- <el-form-item label="封面">
-          <el-radio-group v-model="form.resource">
-            <el-radio label="线上品牌商赞助"></el-radio>
-            <el-radio label="线下场地免费"></el-radio>
+        <el-form-item label="封面">
+          <el-radio-group v-model="article.cover.type">
+            <el-radio :label="1">单图</el-radio>
+            <el-radio :label="3">三图</el-radio>
+            <el-radio :label="0">无图</el-radio>
+            <el-radio :label="-1">自动</el-radio>
           </el-radio-group>
-        </el-form-item> -->
+          <template v-if="article.cover.type >= 0">
+            <upload-image v-for="item in article.cover.type" :key="item"></upload-image>
+          </template>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit(false)">发表</el-button>
           <el-button @click="onSubmit(true)">存入草稿</el-button>
@@ -61,12 +66,14 @@ import 'quill/dist/quill.bubble.css'
 import { quillEditor } from 'vue-quill-editor'
 
 import ChannelSelect from '@/components/channel-select'
+import UploadImage from './components/upload-image.vue'
 export default {
   name: 'PublishArticle',
   components: {
     // 注册局部组件
     quillEditor,
-    ChannelSelect
+    ChannelSelect,
+    UploadImage
   },
   data () {
     return {

@@ -10,11 +10,11 @@
     <!-- 右侧 -->
     <el-col :span="3" class="right">
       <!-- 头像 -->
-      <img src="../assets/img/09.png" alt="">
+      <img width="50" :src="user.photo" alt="">
       <!-- 下拉菜单 -->
       <el-dropdown trigger="click">
         <span>
-          Mofantian<i class="el-icon-arrow-down el-icon--right"></i>
+          {{user.name}}<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>账户信息</el-dropdown-item>
@@ -31,7 +31,17 @@
 </template>
 
 <script>
+import eventBus from '@/utils/event-bus'
 export default {
+  name: 'LayoutHeater',
+  data () {
+    return {
+      user: {
+        name: '',
+        photo: ''
+      }
+    }
+  },
   methods: {
     onLogout () {
       this.$confirm('确认退出吗?', '退出提示', {
@@ -55,7 +65,26 @@ export default {
           message: '已取消退出'
         })
       })
+    },
+    loadUser () {
+      this.$axios({
+        method: 'GET',
+        url: '/user/profile'
+      }).then(res => {
+        this.user = res.data.data
+      }).catch(err => {
+        console.log('获取用户失败', err)
+      })
     }
+  },
+  created () {
+    this.loadUser()
+    // 在初始化中监听自定义事件
+    eventBus.$on('update-user', user => {
+      // console.log('update-user调用了')
+      this.user.name = user.name
+      this.user.photo = user.photo
+    })
   }
 }
 </script>

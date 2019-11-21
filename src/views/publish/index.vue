@@ -45,7 +45,11 @@
             <el-radio :label="-1">自动</el-radio>
           </el-radio-group>
           <template v-if="article.cover.type >= 0">
-            <upload-image v-for="item in article.cover.type" :key="item"></upload-image>
+            <el-row :gutter="20">
+              <el-col :span="4" v-for="item in article.cover.type" :key="item">
+                <upload-image v-model="article.cover.images[item - 1]"></upload-image>
+              </el-col>
+            </el-row>
           </template>
         </el-form-item>
         <el-form-item>
@@ -82,6 +86,7 @@ export default {
         content: '', // 文章内容
         cover: {
           type: 0, // 封面类型 -1:自动，0-无图，1-1张，3-3张
+          // 我们需要把用户选择上传的图片路径存储到这个数组中,用于提交给后台
           images: [] // 图片,无图就是空数组即可
         }, // 文章封面
         channel_id: ''

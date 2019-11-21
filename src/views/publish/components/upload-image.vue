@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="preview" @click="onUploadShow">
-      <img class="avatar" v-if="previewImages" :src="previewImages">
+      <img class="avatar" v-if="value" :src="value">
       <i class="el-icon-plus avatar-uploader-icon" v-else></i>
     </div>
     <!--
@@ -37,7 +37,16 @@
             </el-col>
           </el-row>
         </el-tab-pane>
-        <el-tab-pane label="上传图片" name="second">上传图片</el-tab-pane>
+        <el-tab-pane label="上传图片" name="second">
+          <el-upload
+            action="http://ttapi.research.itcast.cn/mp/v1_0/user/images"
+            list-type="picture-card"
+            :headers="uploadHeaders"
+            name="image"
+            :on-preview="onPreview">
+            <i class="el-icon-plus"></i>
+          </el-upload>
+        </el-tab-pane>
       </el-tabs>
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">取 消</el-button>
@@ -51,14 +60,24 @@
 </template>
 
 <script>
+const token = window.localStorage.getItem('user-token')
 export default {
   name: 'UploadImage',
+  props: {
+    // 选择预览的图片地址
+    value: {
+      type: String
+    }
+  },
   data () {
     return {
       centerDialogVisible: false,
       activeName: 'first',
       activeImage: 'all',
-      previewImages: '',
+      previewImages: '', // 存储选中的上传图片的路径
+      uploadHeaders: {
+        Authorization: `Bearer ${token}`
+      },
       images: [],
       activeIndex: null // 激活的图片的索引
     }
@@ -85,15 +104,27 @@ export default {
       })
     },
     onConfirm () {
-      const image = this.images[this.activeIndex]
-      if (image) {
-        // 将选中的图片路径赋值给previewImages
-        this.previewImages = image.url
-        // 将图片的地址同步给父组件的绑定的数据
-        this.$emit('input', image.url)
+      if (this.activeName === 'first') {
+        // 当前是素材库
+        const image = this.images[this.activeIndex]
+        if (image) {
+          // 将选中的图片路径赋值给previewImages
+          // this.previewImages = image.url
+          // 将图片的地址同步给父组件的绑定的数据
+          this.$emit('input', image.url)
+        }
+      } else if (this.activeName === 'second') {
+        // 当前是上传图片
+        const previewImage = this.previewImage
+        if (previewImage) {
+          this.$emit('input', previewImage)
+        }
       }
       // 关闭对话框
       this.centerDialogVisible = false
+    },
+    onPreview (file) {
+      this.previewImage = file.response.data.url
     }
   }
 }

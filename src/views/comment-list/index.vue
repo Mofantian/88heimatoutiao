@@ -109,8 +109,8 @@ export default {
         //   item.pubdate = moment(item.pubdate).format('YYYY-MM-DD HH:mm:ss')
         // })
         this.commentlist = comments
-      }).catch(err => {
-        console.log('获取评论数据失败', err)
+      }).catch(() => {
+        // console.log('获取评论数据失败', err)
       })
     },
     onTop (comment) {
@@ -122,10 +122,10 @@ export default {
         }
       }).then(res => {
         this.$message.success('操作成功')
-        console.log(res)
-      }).catch(err => {
+        // console.log(res)
+      }).catch(() => {
         this.$message.error('操作失败')
-        console.log('操作失败', err)
+        // console.log('操作失败', err)
       })
     }
   }

@@ -72,8 +72,8 @@ export default {
         url: '/user/profile'
       }).then(res => {
         this.user = res.data.data
-      }).catch(err => {
-        console.log('获取用户失败', err)
+      }).catch(() => {
+        // console.log('获取用户失败', err)
       })
     }
   },

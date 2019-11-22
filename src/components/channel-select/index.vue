@@ -57,8 +57,8 @@ export default {
       }).then(res => {
         // console.log(res)
         this.channels = res.data.data.channels
-      }).catch(err => {
-        console.log('文章类别获取失败', err)
+      }).catch(() => {
+        // console.log('文章类别获取失败', err)
       })
     },
     onInput (data) { // data是选中的option的value

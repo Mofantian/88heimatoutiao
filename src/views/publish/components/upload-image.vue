@@ -99,8 +99,8 @@ export default {
       }).then(res => {
         // console.log(res)
         this.images = res.data.data.results
-      }).catch(err => {
-        console.log('数据获取失败', err)
+      }).catch(() => {
+        // console.log('数据获取失败', err)
       })
     },
     onConfirm () {

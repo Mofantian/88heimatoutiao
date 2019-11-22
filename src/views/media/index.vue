@@ -100,8 +100,8 @@ export default {
       }).then(res => {
         // console.log(res)
         this.images = res.data.data.results
-      }).catch(err => {
-        console.log('数据获取失败', err)
+      }).catch(() => {
+        // console.log('数据获取失败', err)
       })
     },
     // 该函数是radio的change事件处理函数
@@ -123,9 +123,9 @@ export default {
         this.$message.success('操作成功')
         // 更新视图展示
         item.is_collected = !item.is_collected
-      }).catch(err => {
+      }).catch(() => {
         this.$message.error('操作失败')
-        console.log('收藏状态操作失败', err)
+        // console.log('收藏状态操作失败', err)
       })
     },
     onDelete (item) {
@@ -141,9 +141,9 @@ export default {
           this.$message.success('删除成功')
           // 更新视图展示
           this.loadImages()
-        }).catch(err => {
+        }).catch(() => {
           this.$message.error('删除失败')
-          console.log('删除操作失败', err)
+          // console.log('删除操作失败', err)
         })
       }).catch(() => {
         this.$message({
@@ -185,9 +185,9 @@ export default {
       }).then(res => {
         // console.log(res)
         this.loadImages()
-      }).catch(err => {
+      }).catch(() => {
         this.$message.error('上传失败')
-        console.log('上传操作失败', err)
+        // console.log('上传操作失败', err)
       })
     }
   }

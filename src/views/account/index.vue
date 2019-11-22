@@ -62,8 +62,8 @@ export default {
       }).then(res => {
         // console.log(res)
         this.user = res.data.data
-      }).catch(err => {
-        console.log('获取用户数据失败', err)
+      }).catch(() => {
+        // console.log('获取用户数据失败', err)
         this.$message.error('获取数据失败')
       })
     },
@@ -82,9 +82,9 @@ export default {
         eventBus.$emit('update-user', this.user)
         this.$message.success('修改成功')
         this.loadUserProfile()
-      }).catch(err => {
+      }).catch(() => {
         this.$message.error('修改失败')
-        console.log('修改用户数据失败', err)
+        // console.log('修改用户数据失败', err)
       })
     },
     // 该事件触发的时候,它会给这个函数传递这个参数
@@ -101,9 +101,9 @@ export default {
         this.loadUserProfile()
         // 发布通知头部组件
         eventBus.$emit('update-user', this.user)
-      }).catch(err => {
+      }).catch(() => {
         this.$message.error('上传失败')
-        console.log('上传头像失败', err)
+        // console.log('上传头像失败', err)
       })
     }
   }

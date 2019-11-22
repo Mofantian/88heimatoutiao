@@ -82,8 +82,8 @@ export default {
         this.articles = res.data.data.results
         // 更新总记录数
         this.totalCount = res.data.data.total_count
-      }).catch(err => {
-        console.log('获取数据失败', err)
+      }).catch(() => {
+        // console.log('获取数据失败', err)
       }).finally(() => { // 无论成功还是失败最终都要执行
         this.loading = false
       })
@@ -103,9 +103,9 @@ export default {
           type: 'success',
           message: `${article.comment_status ? '启用' : '关闭'}成功`
         })
-      }).catch(err => {
+      }).catch(() => {
         this.$message.error('操作失败')
-        console.log('评论状态操作失败', err)
+        // console.log('评论状态操作失败', err)
       })
     },
     onPageChange (page) {

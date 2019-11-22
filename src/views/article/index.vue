@@ -235,8 +235,8 @@ export default {
         // console.log(this.articles)
         // 更新总记录数
         this.totalCount = res.data.data.total_count
-      }).catch(err => {
-        console.log('获取数据失败', err)
+      }).catch(() => {
+        // console.log('获取数据失败', err)
       }).finally(() => { // 无论成功还是失败最终都要执行
         this.loading = false
       })
@@ -263,8 +263,8 @@ export default {
         // console.log(res)
         // 删除成功,重新加载当前页码的文章列表
         this.loadArticles(this.page)
-      }).catch(err => {
-        console.log('数据删除失败', err)
+      }).catch(() => {
+        // console.log('数据删除失败', err)
       })
     }
   },

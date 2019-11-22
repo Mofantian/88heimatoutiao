@@ -124,11 +124,11 @@ export default {
           type: 'success',
           message: '发布成功'
         })
-        console.log('发布成功', res)
+        // console.log('发布成功', res)
         this.$router.push('/article')
-      }).catch(err => {
+      }).catch(() => {
         this.$message.error('发布失败')
-        console.log('发布失败', err)
+        // console.log('发布失败', err)
       })
     },
     updateArticle (draft) {
@@ -146,11 +146,11 @@ export default {
           type: 'success',
           message: '更新成功'
         })
-        console.log('修改成功', res)
+        // console.log('修改成功', res)
         this.$router.push('/article')
-      }).catch(err => {
+      }).catch(() => {
         this.$message.error('更新失败')
-        console.log('发布失败', err)
+        // console.log('发布失败', err)
       })
     },
     // 是否需要token由接口文档告诉你
